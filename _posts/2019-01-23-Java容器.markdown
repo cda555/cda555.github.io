@@ -4,7 +4,7 @@ title:  "Java容器"
 date:   2019-01-23 15:56:21 +0800
 categories: Java Collection
 ---
-### 目标
+# 目标
 本文解决以下问题
 
 - 什么是容器类？
@@ -18,11 +18,11 @@ categories: Java Collection
 
 看完本篇后希望读者对`Java 容器`有一个整体的认识，并知道如何在你的程序中存储对象的引用。
 
-### 什么是Java集合容器？
+# 什么是Java集合容器？
 
 用于存储数量不定的对象引用的工具类，你可以将任意数量的对象放置到容器中，并且不需要担心容器应该设置为多大。
 
-### 为什么需要容器
+# 为什么需要容器
 
 在日常编程过程中，经常需要存储数量不确定的对象（对象引用）所以需要容器工具类来存储这些对象。
 
@@ -37,7 +37,7 @@ categories: Java Collection
 >  大多数语言都提供某种方法来解决这个基本问题。Java有多重方式保存对象（应该说是对象的引用）。例如前面曾经学习过的数组，它是编译器支持的类型。数组是保存一组对象的最有效的方式，如果你想保存一组基本类型数据，也推荐使用这种方式。但是数组具有固定的尺寸，而在一般的情况中，你在写程序时并不知道将需要多少个对象，或者是需要更富在的方式来存储对象，因此数组尺寸固定这一限制显得过于受限了。
 >&copy;Java编程思想(第四版)
 
-### 如何让你去实现集合类，你将如何实现？将提供哪些功能的集合？
+# 如何让你去实现集合类，你将如何实现？将提供哪些功能的集合？
 
 知道了容器的定以后，那么存储对象的容器应该提供哪些功能呢？或者说如何实现会更方便我们日常的开发？
 
@@ -49,17 +49,17 @@ categories: Java Collection
 - 以何种方式查看内容
 - 字典类型数据结构的支持
 
-### 容器概览
+# 容器概览
 
 Java容器分为Collection与Map
 
-#### Collection
+## Collection
 
-#####　List
+###　List
 
 有顺序的集合
 
-###### ArrayList
+#### ArrayList
 
 以数组实现。节约空间，但数组有容量限制。超出限制会扩容，使用`System.arraycopy()`复制到新的数组。初始容量为10，超出容量后会扩容。扩容机制原先的长度扩容50%
 
@@ -89,15 +89,15 @@ private int newCapatity(int minCapacity){
 
 但是如果插入元素、删除元素 `add(i,e);remove(i);remove(e),则要使用`System.arraycopy()`来赋值移动受影响的部分，性能就变差了。
 
-###### LinkList
+#### LinkList
 
-以双向链表实现。链表无容量限制，但双向链表本身使用了更多的空间，没插入一个元素都要构造额外的Node对象和额外的链表指针。
+以双向链表实现。链表无容量限制，但双向链表本身使用了更多的空间，每插入一个元素都要构造额外的Node对象和额外的链表指针。
 
 按下表访问元素`get(i)、set(i,e)`要遍历链表到指针移动到具体的位置（如果i>数组大小的一半，会从末尾开始遍历）。
 
 插入、删除元素时修改前后指针即可，不需要复制或移动。但需要部分遍历链表的指针才能移动到指定下标的位置。
 
-###### CopyOnWriterArrayList
+#### CopyOnWriterArrayList
 
 并发优化的`ArrayList`（同样使用数组实现）。基于不可变对象策略，在修改时先复制出一个数组快照来修改，改好了，在让内部指针指向新数组。
 
@@ -118,11 +118,11 @@ public boolean add(E e){
 
 
 
-###### Collections.synchronizedList(list);
+#### Collections.synchronizedList(list);
 
 通过这个方法返回线程安全的`List`，该方法通过代理对象对代理对象的方法加锁来实现线程安全。
 
-###### 遗憾
+#### 遗憾
 
 无论哪种实现，涉及到按值查找都需要遍历所有元素，性能不会太好。
 
@@ -130,21 +130,21 @@ public boolean add(E e){
 
 除了CopyOnWriteArrayList，再没有其他线程安全又并发优化的数组实现，如ConcurrentLinkeList。凑合着使用Set与Queue中的等价类时，会缺少一些List特有的方法如`get(i)`.如果更新频率较高，或者数组较大时，需要使用Collection.synchronizedList(list),对所有操作使用一把锁来保证线程安全。
 
-#### Set
+## Set
 
 结构
 
 ![Set结构](D:\act\cda555.github.io\img\Set.png)
 
-#### Map
+## Map
 
-将键映射到值对象上。一个映射不能包含重复的键；每个键只能映射到一个值。
+将键映射到值对象上，映射不能包含重复的键，每个键只能映射到一个值。
 
-##### HashMap 
+### HashMap 
 
-JDK 1.7 采用数组加链表的方式实现。
+*JDK 1.7* 采用数组加链表的方式实现。
 
-JDK 1.8 采用数组加红黑树（如果筒中元素大于8）的方式实现。
+*JDK 1.8* 采用数组加红黑树（如果筒中元素大于8）的方式实现。
 
 put方法的实现
 
@@ -227,7 +227,7 @@ iterator()
 
 
 
-##### LinkedHashMap
+### LinkedHashMap
 
 有序的HashMap
 
@@ -236,7 +236,7 @@ iterator()
 > 重写了HashMap中的 newNode方法, 并在HashMap.Node中添加 before, after两个引用。来存储元素顺序。
 
 > ```java
-> //
+> 
 > Node<K,V> newNode(int hash, K key, V value, Node<K,V> e) {
 >         LinkedHashMap.Entry<K,V> p =
 >             new LinkedHashMap.Entry<>(hash, key, value, e);
@@ -254,49 +254,30 @@ iterator()
 >
 > 
 
-##### TreeMap
+### TreeMap
 
 使用红黑树实现。该映射根据其键的自然顺序排序，或者根据创建映射时提供的Comparator进行排序，具体取决于使用的构造方法。
 
 ![TreeMap](../img/TreeMap.png)
 
-##### EnumMap
+### EnumMap
 
 - EnumMap是一个与枚举类一起使用的Map实现，所有Key都必须是单个枚举类的枚举值。创建EnumMap时必须显示或隐式指定它对应的枚举类。
 - EnumMap内部以数组形式保存，初始化时会创建于枚举值数量相等的数组。
 
 - EnumMap中的顺手是枚举中值得的顺序。
 
-##### ConcurrentHashMap
+### ConcurrentHashMap
 
 
 
 
 
-##### ConcurrentSkipListMap
+### ConcurrentSkipListMap
 
 
 
 
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
-
-To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
-
-Jekyll also offers powerful support for code snippets:
-
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
-
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
-
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
 
 ---
 #### 参考
